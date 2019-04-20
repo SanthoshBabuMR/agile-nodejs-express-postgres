@@ -1,0 +1,95 @@
+-- Database: agile
+
+-- DROP DATABASE agile;
+
+-- DB: AGILE
+ CREATE DATABASE agile
+     WITH 
+     OWNER = postgres
+     ENCODING = 'UTF8'
+     LC_COLLATE = 'English_United States.1252'
+     LC_CTYPE = 'English_United States.1252'
+     TABLESPACE = pg_default
+     CONNECTION LIMIT = -1;
+	
+-- TABLE: USERS
+CREATE TABLE USERS (
+ ID SERIAL PRIMARY KEY ,
+ EMAIL VARCHAR(51) UNIQUE NOT NULL,
+ NAME VARCHAR(101)
+);
+INSERT INTO USERS (EMAIL, NAME) VALUES ('santhosh.infotec@gmail.com', 'Santhosh Babu');
+INSERT INTO USERS (EMAIL, NAME) VALUES ('shaktish@gmail.com', 'Shaktish');
+SELECT * FROM USERS;
+delete from users where id not in (1,2);
+
+-- TABLE: TAGS
+CREATE TABLE TAGS (
+ID SERIAL PRIMARY KEY,
+NAME VARCHAR(51) NOT NULL UNIQUE,
+DESCRIPTION VARCHAR(101)
+);
+INSERT INTO TAGS (NAME) VALUES ('START_DOING'), ('STOP_DOING'), ('CONTINUE_DOING');
+SELECT * FROM TAGS;
+
+-- TABLE: RETRO_POINTS
+CREATE TABLE RETRO_POINTS (
+ ID SERIAL PRIMARY KEY,
+ DESCRIPTION VARCHAR(501) NOT NULL,
+ TAG_ID INTEGER REFERENCES TAGS(ID),
+ USER_ID INTEGER REFERENCES USERS(ID)
+);
+INSERT INTO RETRO_POINTS 
+(DESCRIPTION, TAG_ID, USER_ID) 
+VALUES 
+('Team Co-ordination', 3, 1);
+INSERT INTO RETRO_POINTS 
+(DESCRIPTION, TAG_ID, USER_ID)
+VALUES 
+('Learn and Share', 1, 2);
+INSERT INTO RETRO_POINTS 
+(DESCRIPTION, TAG_ID, USER_ID)
+VALUES 
+('Meetings on friday eve, after 5pm', 2, 1);
+SELECT * FROM RETRO_POINTS;
+
+-- TABLE: RETRO_ACTION_ITEMS
+CREATE TABLE RETRO_ACTION_ITEMS (
+ ID SERIAL,
+ DESCRIPTION VARCHAR(501) NOT NULL,
+ RETRO_POINTS_ID INTEGER REFERENCES RETRO_POINTS(ID),
+ OWNER_ID INTEGER REFERENCES USERS(ID)
+);
+INSERT INTO RETRO_ACTION_ITEMS 
+(DESCRIPTION, RETRO_POINTS_ID, OWNER_ID) 
+VALUES 
+('Post DSM: Spend 15 mins discussing new technologies relevant to our project', 2, 1);
+INSERT INTO RETRO_ACTION_ITEMS 
+(DESCRIPTION, RETRO_POINTS_ID, OWNER_ID) 
+VALUES 
+('Communicate scheulde to stackholder involved. Schedule Meetings before 5pm on friday or have it moved to monday.', 3, 1);
+SELECT * FROM RETRO_ACTION_ITEMS;
+
+SELECT TEMP1."Retro Point", TEMP1."Suggested By", TEMP1."Action Item" AS "Action Item", U.NAME  AS "Owned By"
+FROM
+(
+  SELECT TEMP."Retro Point", TEMP."Suggested By", RAI.DESCRIPTION AS "Action Item", RAI.OWNER_ID AS "Owned By ID"
+  FROM
+    (
+  	  SELECT RP.ID AS "Retro Point Id", RP.DESCRIPTION AS "Retro Point", U.NAME AS "Suggested By", U.ID AS "Suggested User Id"
+      FROM RETRO_POINTS RP
+      INNER JOIN USERS U
+      ON U.ID = RP.USER_ID
+    ) TEMP
+  INNER JOIN 
+  RETRO_ACTION_ITEMS RAI
+  ON TEMP."Retro Point Id" = RAI.RETRO_POINTS_ID
+) TEMP1
+  INNER JOIN 
+  USERS U
+  ON TEMP1."Owned By ID" = U.ID;
+  
+  
+SELECT *
+FROM information_schema.columns
+WHERE table_name = 'users';
