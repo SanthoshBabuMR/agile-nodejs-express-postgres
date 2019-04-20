@@ -1,0 +1,111 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 11.2
+-- Dumped by pg_dump version 11.2
+
+-- Started on 2019-04-20 13:45:54
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 2847 (class 0 OID 16446)
+-- Dependencies: 199
+-- Data for Name: tags; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tags (id, name, description) FROM stdin;
+1	START_DOING	\N
+2	STOP_DOING	\N
+3	CONTINUE_DOING	\N
+\.
+
+
+--
+-- TOC entry 2845 (class 0 OID 16422)
+-- Dependencies: 197
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (id, email, name) FROM stdin;
+2	shaktish@gmail.com	Shaktish
+1	santhosh.infotec@gmail.com	Santhosh
+\.
+
+
+--
+-- TOC entry 2849 (class 0 OID 16484)
+-- Dependencies: 201
+-- Data for Name: retro_points; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.retro_points (id, description, tag_id, user_id) FROM stdin;
+1	Team Co-ordination	3	1
+2	Learn and Share	1	2
+3	Meetings on friday eve, after 5pm	2	1
+\.
+
+
+--
+-- TOC entry 2851 (class 0 OID 16505)
+-- Dependencies: 203
+-- Data for Name: retro_action_items; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.retro_action_items (id, description, retro_points_id, owner_id) FROM stdin;
+2	Post DSM: Spend 15 mins discussing new technologies relevant to our project	2	1
+3	Communicate scheulde to stackholder involved. Schedule Meetings before 5pm on friday or have it moved to monday.	3	1
+\.
+
+
+--
+-- TOC entry 2857 (class 0 OID 0)
+-- Dependencies: 202
+-- Name: retro_action_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.retro_action_items_id_seq', 3, true);
+
+
+--
+-- TOC entry 2858 (class 0 OID 0)
+-- Dependencies: 200
+-- Name: retro_points_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.retro_points_id_seq', 3, true);
+
+
+--
+-- TOC entry 2859 (class 0 OID 0)
+-- Dependencies: 198
+-- Name: tags_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.tags_id_seq', 3, true);
+
+
+--
+-- TOC entry 2860 (class 0 OID 0)
+-- Dependencies: 196
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 20, true);
+
+
+-- Completed on 2019-04-20 13:45:54
+
+--
+-- PostgreSQL database dump complete
+--
+
