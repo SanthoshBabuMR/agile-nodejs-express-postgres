@@ -13,7 +13,7 @@ export default ({ config, db }) => {
 		 *  Errors terminate the request, success sets `req[id] = data`.
 		 */
 		load(req, id, callback) {
-				const query = 'SELECT * from USER_RETRO_SESSION where id = $1';
+			const query = 'SELECT * from USER_RETRO_SESSION where retro_session_id = $1';
 			const values = [id];
 			db.query(query, values, (err, result) => {
 				let userRetroSession = USER_RETRO_SESSION_NOT_FOUND;
@@ -21,8 +21,9 @@ export default ({ config, db }) => {
 					return res.json(err);
 				}
 				if (result.rows.length) {
-					userRetroSession = result.rows[0];
+					userRetroSession = result.rows;
 				}
+				req.retro_session_id = id;
 				callback(err, userRetroSession)
 			});
 		},
@@ -41,8 +42,8 @@ export default ({ config, db }) => {
 	
 		/** POST / - Create a new entity */
 		create(req, res) {
-			const query = "INSERT INTO USER_RETRO_SESSION(description) VALUES($1)";
-			const values = [req.body.description];
+			const query = "INSERT INTO USER_RETRO_SESSION(retro_session_id, user_id) VALUES($1, $2)";
+			const values = [req.body.retro_session_id, req.body.user_id];
 	
 			db.query(query, values, (err, result) => {
 				if(err) {
@@ -57,34 +58,13 @@ export default ({ config, db }) => {
 			if(req.userRetroSession === USER_RETRO_SESSION_NOT_FOUND) {
 				return res.sendStatus(404);
 			}
-			res.json(req.user);
+			res.json(req.userRetroSession);
 		},
-	
-		/** PUT /:id - Update a given entity */
-		update(req, res) {
-			if(req.userRetroSession === USER_RETRO_SESSION_NOT_FOUND) {
-				return res.sendStatus(404);
-			}
-			const query = "UPDATE USER_RETRO_SESSION SET description = $1 WHERE id = $3"
-			const values = [req.body.description, req.params.userRetroSession ]
-			db.query(query, values, (err, result) => {
-				if(err) {
-					return res.json(err);
-				}
-				if(result.rowCount === 0) {
-					res.sendStatus(404);
-				}
-				res.sendStatus(204);	
-			});
-		},
-	
+		
 		/** DELETE /:id - Delete a given entity */
 		delete(req, res) {
-			if(req.userRetroSession === USER_RETRO_SESSION_NOT_FOUND) {
-				return res.sendStatus(404);
-			}
-			const query = "DELETE FROM USER_RETRO_SESSION where id = $1";
-			const values = [req.user.id];
+			const query = "DELETE FROM USER_RETRO_SESSION where retro_session_id = $1";
+			const values = [req.retro_session_id];
 	
 			db.query(query, values, (err, result) => {
 				if(err) {
