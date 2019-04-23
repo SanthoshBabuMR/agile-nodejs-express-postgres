@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <title>SignIn</title>
+<body>
+<h1>Signin</h1>
+
+<form action="">
+<input type="text" placeholder="email">
+<button type="button">SignIn</button>
+</form>
+
+​<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+<script>
+window.addEventListener('DOMContentLoaded', (event) => {
+    console.log('DOMContentLoaded');
+    document.querySelector('button').addEventListener('click', function (e) {
+        console.log('click');
+        var email = document.querySelector('input').value;
+        axios.post('/api/users/', {email:email, name: 'temp'}).then(function() {
+            debugger
+        }).catch(function() {
+            debugger
+        });
+    });
+});
+</script>
+</body>
+</html>
+​

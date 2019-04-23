@@ -12,7 +12,7 @@ let app = express();
 app.server = http.createServer(app);
 
 // logger
-app.use(morgan('dev'));
+app.use(morgan('combined'));
 
 // 3rd party middleware
 app.use(cors({
@@ -36,6 +36,9 @@ initializeDb( db => {
 	// api router
 	app.use('/api', api({ config, db }));
 
+	app.use(express.static('src/public/'));
+	app.use(express.static('src/public/html'));
+	
 	app.server.listen(process.env.PORT || config.port, () => {
 		console.log(`Started on port ${app.server.address().port}`);
 	});

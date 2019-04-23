@@ -118,5 +118,9 @@ INSERT INTO USER_RETRO_SESSION (RETRO_SESSION_ID, USER_ID) VALUES (1, 1);
 SELECT * FROM USER_RETRO_SESSION;
 ALTER TABLE USER_RETRO_SESSION ADD CONSTRAINT unique_combo_of_retro_session_id_and_user_id UNIQUE (RETRO_SESSION_ID, USER_ID);
 
+select * from users;
+ALTER TABLE users 
+DROP COLUMN retro_session_id;
+
 FROM information_schema.columns
 WHERE table_name = 'users';
